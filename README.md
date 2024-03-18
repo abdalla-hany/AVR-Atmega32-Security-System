@@ -30,7 +30,7 @@ This repository contains the code for an embedded security system designed for a
 - PWM
 
 ## Project Structure:
-## First  Microcontroller HMI ECU
+# First  Microcontroller HMI ECU
 1. Application Layer (APP)
   - **HMI_ECU.c**: The main application file that orchestrates the interaction between different modules and controls the overall system behavior For HMI Fucnctions.
   -  **hmi_functions.c/h**: the implementation of functions for the Human-Machine Interface (HMI) of an Electronic Control Unit (ECU). It includes initialization, password handling, command sending and receiving, and user interface interactions.
@@ -44,7 +44,7 @@ This repository contains the code for an embedded security system designed for a
   - **uart.c/h**: Implements the UART communication driver for the communication between the two microcontrollers.
   - **timer.c/h**: Implements the timer1 driver to count time.
 
-## Second  Microcontroller CONTROL ECU
+# Second  Microcontroller CONTROL ECU
 1. Application Layer (APP)
   - **CONTROL_ECU.c**: Main file for the Control Electronic Control Unit (ECU). It initializes the system, checks for existing passwords, and continuously processes incoming commands related to password management and door operations.
   -  **control_functions.c/h**: the implementation of control functions for the Control ECU.
