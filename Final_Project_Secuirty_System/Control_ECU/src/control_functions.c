@@ -123,50 +123,64 @@ uint8 Receiving_Passwords (void)
 }
 
 /* Function to check the entered password against the stored one */
+/* Function to check if the entered password matches the stored password */
 uint8 Checking_Password(uint8 command)
 {
+	/* Variable to iterate through the password array */
 	uint8 i;
+	/* Increment the global attempt counter */
 	g_attempt++;
 
+	/* Send a byte to indicate readiness to receive data */
 	UART_sendByte(READY_TO_RECEVIE);
+	/* Receive the first password attempt from the user */
 	UART_receiveData(g_firstPass, PASSWORD_SIZE);
 
+	/* Read the stored password from EEPROM */
 	EEPROM_readData(PASSWORD_LOCATION, g_secondPass, PASSWORD_SIZE);
 
+	/* Loop through each digit of the password */
 	for(i = 0; i < PASSWORD_SIZE; i++)
 	{
+		/* If the digits match, continue to the next digit */
 		if (g_firstPass[i] == g_secondPass[i])
 		{
 			continue;
 		}
 		else
 		{
+			/* If any digit does not match, determine the command and return the corresponding error */
 			switch(command)
 			{
 				case OPEN_DOOR:
+					/* Password does not match for 'Open Door' command */
 					return PASSWORD_UNMATCH_OPEN;
 					break;
 				case CHANGING_PASSWORD:
+					/* Password does not match for 'Change Password' command */
 					return PASSWORD_UNMATCH_CHANGE;
 					break;
 			}
 		}
 	}
 
+	/* If all digits matched, determine the command and return the corresponding success code */
 	switch(command)
 	{
 		case OPEN_DOOR:
+			/* Reset the attempt counter and return success for 'Open Door' */
 			g_attempt = ZERO_ATTEMPTS;
 			return PASSWORD_MATCH_OPEN;
 			break;
 		case CHANGING_PASSWORD:
+			/* Reset the attempt counter and return success for 'Change Password' */
 			g_attempt = ZERO_ATTEMPTS;
 			return PASSWORD_MATCH_CHANGE;
 			break;
 	}
+	/* Return 0 if none of the cases are met (should not happen in normal operation) */
 	return 0;
 }
-
 /* Function to simulate the door opening and closing process */
 void Open_Door (void)
 {
