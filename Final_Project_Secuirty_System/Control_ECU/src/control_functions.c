@@ -122,7 +122,6 @@ uint8 Receiving_Passwords (void)
 	}
 }
 
-/* Function to check the entered password against the stored one */
 /* Function to check if the entered password matches the stored password */
 uint8 Checking_Password(uint8 command)
 {
