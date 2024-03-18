@@ -125,31 +125,46 @@ uint8 Receiving_Passwords (void)
 /* Function to check the entered password against the stored one */
 uint8 Checking_Password(uint8 command)
 {
-	/* Local variable for loop control */
 	uint8 i;
-
-	/* Increment attempt counter */
 	g_attempt++;
 
-	/* Receive entered password*/
 	UART_sendByte(READY_TO_RECEVIE);
 	UART_receiveData(g_firstPass, PASSWORD_SIZE);
 
-	/* Read stored password from EEPROM */
 	EEPROM_readData(PASSWORD_LOCATION, g_secondPass, PASSWORD_SIZE);
 
-	/* Compare entered password against stored one */
 	for(i = 0; i < PASSWORD_SIZE; i++)
 	{
-		if (g_firstPass[i] != g_secondPass[i])
+		if (g_firstPass[i] == g_secondPass[i])
 		{
-			/* Return appropriate mismatch code based on command */
-			return (command == OPEN_DOOR) ? PASSWORD_UNMATCH_OPEN : PASSWORD_UNMATCH_CHANGE;
+			continue;
+		}
+		else
+		{
+			switch(command)
+			{
+				case OPEN_DOOR:
+					return PASSWORD_UNMATCH_OPEN;
+					break;
+				case CHANGING_PASSWORD:
+					return PASSWORD_UNMATCH_CHANGE;
+					break;
+			}
 		}
 	}
 
-	/* Return appropriate match code based on command */
-	return (command == OPEN_DOOR) ? PASSWORD_MATCH_OPEN : PASSWORD_MATCH_CHANGE;
+	switch(command)
+	{
+		case OPEN_DOOR:
+			g_attempt = ZERO_ATTEMPTS;
+			return PASSWORD_MATCH_OPEN;
+			break;
+		case CHANGING_PASSWORD:
+			g_attempt = ZERO_ATTEMPTS;
+			return PASSWORD_MATCH_CHANGE;
+			break;
+	}
+	return 0;
 }
 
 /* Function to simulate the door opening and closing process */
